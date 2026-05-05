@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: mentecart-mongo
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: mentecart
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mentecart-backend
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      PORT: 3000
+      MONGODB_URI: mongodb://mongodb:27017/mentecart
+      JWT_SECRET: ${JWT_SECRET:-change_this_in_production}
+      JWT_EXPIRES_IN: 24h
+      CART_EXPIRY_MINUTES: 15
+      MAX_BOOKINGS_PER_DAY: 3
+      NODE_ENV: production
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo_data:
