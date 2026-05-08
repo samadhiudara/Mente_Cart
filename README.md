@@ -3,8 +3,6 @@
 A full-stack service booking application.
 Users can browse services, add them to a cart, select time slots, and complete bookings.
 
----
-
 ## Tech Stack
 
 | Layer        | Technology                        |
